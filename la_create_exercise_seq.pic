@@ -1,0 +1,62 @@
+.PS
+copy "sequence.pic";
+
+movewid = 1;
+maxpsht = 15;
+maxpswid = 15;
+spacing = 0.2;
+
+# Define objects
+placeholder_object(L);
+object(E,":ECS");
+placeholder_object(B);
+object(I,"Ilias:LMS");
+actor(A,"");
+step();
+
+# Message sequences
+
+message(A,I,"new exercise");
+active(I);
+
+message(I,E,"subpid,EcsAuthId:=POST:/sys/subparticipants");active(E);step();inactive(E);
+
+create_message(I,L,"Lecturer:Applet");
+oconstraint("params:ecsurl,EcsAuthId,iliasmid,compmid");
+
+create_message(I,B,"ExSave:Button");
+inactive(I);
+message(L,E,"exid:=POST:/cc/vip_exercises");
+active(L); active(E);
+step();
+inactive(L); inactive(E);
+step();
+message(A,L,"composing and testing exercise");
+active(L);step();inactive(L);
+
+message(A,B,"save exercise");
+active(B);
+step();
+message(B,L,"applet#saveExercise()");
+active(L);
+rmessage(L,B,"exercise");
+inactive(L); delete(L);
+rmessage(B,I,"exercise");
+inactive(B); delete(B);
+
+active(I);
+step();
+message(I,I,"storing additional metadata into exercise");
+step();
+message(I,I,"storing exercise into pool");
+
+message(I,E,"DELETE:/sys/subparticipants/<subpid>");
+active(E);step();inactive(E);
+
+# Complete the lifelines
+step();
+complete(I);
+complete(E);
+complete(A);
+.PE
+

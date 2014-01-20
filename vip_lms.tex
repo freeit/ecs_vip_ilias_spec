@@ -1,0 +1,155 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[german]{babel}
+\usepackage{textcomp,marvosym}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{chngpage}
+\usepackage{ifthen}
+\usepackage{gitinfo}
+%\enabledraftstandard
+\usepackage[firstpage]{draftwatermark}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+\usepackage{xcolor,soul,lipsum}
+
+\newcommand{\myul}[1]{\ul{#1}}
+
+\SetWatermarkText{ENTWURF}
+\SetWatermarkScale{4}
+\SetWatermarkAngle{50}
+\SetWatermarkLightness{0.90}
+
+\sloppy
+%\hoffset-3mm
+\parindent0mm
+
+\newcommand{\da}{DA}
+\newcommand{\sa}{SA}
+\newcommand{\ecs}{ECS}
+\newcommand{\ilias}{ILIAS}
+\newcommand{\button}[1]{\fbox{\texttt{#1}}}
+\newcommand{\jsToAppletComUrlA}{\mbox{http://stackoverflow.com/questions/7278626/javascript-to-java-applet-communication}}
+\newcommand{\jsToAppletComUrlB}{\mbox{http://docs.oracle.com/javase/tutorial/deployment/applet/invokingAppletMethodsFromJavaScript.html}}
+\newcommand{\appletToDom}{\mbox{http://docs.oracle.com/javase/tutorial/deployment/applet/manipulatingDOMFromApplet.html}}
+
+\begin{document}
+\title{VIP-LMS Anbindung}
+\author{Heiko Bernl"ohr, Per Pascal Grube, Thomas Richter, David Boehringer}
+\maketitle
+\begin{center}
+%  Version: 2.0
+  Version: \gitVtag\\
+%  Commit-id: \gitAbbrevHash
+\end{center}
+\begin{abstract}
+  Maximale Integration von VIP in Ilias. Applet $\leftrightarrow$ Backend
+  Kommunikation wie gehabt über ECS.
+\end{abstract}
+
+\vspace{\fill}
+\begin{center}
+\includegraphics[scale=1.0]{vip_lms}
+\end{center}
+\vspace{\fill}
+
+\newpage
+
+\section{Dozentenapplet}
+\subsection{Workflow}
+\begin{itemize}
+  \item Das Applet wird aus einem Aufgabenpool von Ilias heraus gestartet,
+    entweder zur Erstellung einer neuen oder zum Überarbeitung einer bereits
+    bestehenden Aufgabe (exercise).
+  \item Die Aufgabe (exercise) wird als \textit{hidden field} im HTML
+    Dokument eingebettet, so da"s das Applet diese dort entnehmen kann.
+  \item Beim Starten des Applets werden folgende Parameter mitgegeben:
+    \begin{itemize}
+      \item ECS-URL
+      \item EcsAuthId
+      \item Ilias mid
+      \item Computation-Backend mid
+    \end{itemize}
+  \item Der Dozent bearbeitet/erstellt seine Aufgabe mit dem Applet und kann
+    diese auch jederzeit durch Angabe einer Lösung durch drücken von
+    \button{berechnen}\footnote{wird von Applet implementiert} testweise
+    berechnen lassen.
+  \item Der Dozent kann seine Aufgabe jederzeit durch drücken von
+    \button{speichern}\footnote{wird von Ilias implementiert} sichern, das
+    Applet verlassen/beenden und zu einem späteren Zeitpunkt durch erneute
+    Auswahl der Aufgabe in Ilias wieder bearbeiten. Dabei wird die
+    neue/gänderte Aufgabe (exercise) ebenfalls über ein \textit{hidden field}
+    im HTML Dokument (ExSave:Button Kontext) ans Ilias zurückgegeben.
+\end{itemize}
+Siehe Sequenzdiagramm auf Seite \pageref{seq:la_create_exercise}, Abbildung \ref{seq:la_create_exercise}.
+
+\section{Studentenapplet}
+\subsection{Workflow}
+\begin{itemize}
+  \item Das Applet wird beim Bearbeiten einer VIP-Aufgabe innerhalb eines Ilias-Tests
+    oder als alleinstehende Aufgabe gestartet.
+  \item Die Aufgabe (exercise) wird als \textit{hidden field} im HTML
+    Dokument eingebettet, so da"s das Applet diese dort entnehmen kann.
+  \item Beim Starten des Applets werden folgende Parameter mitgegeben:
+    \begin{itemize}
+      \item ECS-URL
+      \item EcsAuthId
+      \item Ilias mid
+      \item Computation-Backend mid
+    \end{itemize}
+  \item Der Student kann jederzeit eine Berechnung seiner eingegebenen Lösung
+    durch drücken von\addtocounter{footnote}{-2}
+    \button{berechnen}\footnotemark anfordern.
+  \item Der Student gibt seine eingegebene Lösung durch drücken von
+    \button{weiter}\footnotemark ab, wobei \textit{solutions} und
+    \textit{results} als \textit{hidden field} im HTML Dokument eingebettet
+    werden. Sollte bis dahin noch keine oder keine aktuelle Berechnung der
+    Aufgabe vorliegen, weist das Applet daraufhin eine solche durchzuführen.
+  \item Applet beendet sich.
+\end{itemize}
+Siehe Sequenzdiagramm auf Seite \pageref{seq:sa_create_solution_seq}, Abbildung \ref{seq:sa_create_solution_seq}.
+
+\begin{figure}[p]
+  \includegraphics[scale=0.8]{la_create_exercise_seq}
+  \caption{\label{seq:la_create_exercise}Erstellen/überarbeiten einer Aufgabe}
+\end{figure}
+
+\begin{figure}[p]
+  \includegraphics[scale=0.8]{sa_create_solution_seq}
+  \caption{\label{seq:sa_create_solution_seq}Lösungsabgabe einer aus Ilias
+  heraus gestarteten Aufgabenbearbeitung.}
+\end{figure}
+
+\section{Ressourcen}
+\subsection{/sys/subparticipants}
+Ein Subparticipant stellt einen untergeordneten Participanten dar, der am \ecs\
+durch einen Standardparticipanten (statisch eingetragener Participant)
+dynamisch, über die \texttt{/sys/subparticipants} Ressource,
+angemeldet/registriert wird. Im Unterschied zu einem klassischen anonymen
+Participanten darf er nicht nur der \textit{public} community angehören,
+sondern kann durch den registrierenden Participanten jeder Community zugeteilt
+werden, welchen der registrierende Participant selbst auch angehört. Die
+\texttt{/sys/subparticipants} Ressource sieht folgendermaßen aus:
+\begin{verbatim}
+{
+  "mapping_id": "<id>",               #maybe a session id
+  "communities": ["<cid|name>", ...], #optional, default:"public"
+  "community_selfrouting": <boolean>, #optional, default:false
+  "events": <boolean>                 #optional, default:true
+}
+\end{verbatim}
+
+\clearpage
+\begin{appendix}
+\section{Browser $\rightarrow$ Applet Kommunikation}\label{btoacom}
+\begin{itemize}
+  \item \href{\jsToAppletComUrlA}{\myul{Javascript to Java Applet communication}}\footnote{\jsToAppletComUrlA}
+  \item \href{\jsToAppletComUrlB}{\myul{Invoking Applet Methods From JavaScript Code}}\footnote{\jsToAppletComUrlB}
+\end{itemize}
+\section{Applet $\rightarrow$ Browser Kommunikation}
+\begin{itemize}
+  \item \href{\appletToDom}{\myul{Manipulating DOM of Applet's Web Page}}\footnote{\appletToDom}
+\end{itemize}
+\end{appendix}
+\end{document}

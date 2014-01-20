@@ -1,0 +1,42 @@
+Spezifikation: VIP-LMS Anbindung über ECS
+=========================================
+Maximale Integration von VIP in Ilias. Applet <-> Backend
+Kommunikation wie gehabt über ECS.
+
+Unter [1] steht eine aktuelle PDF-Version des Dokuments.
+
+Erstellen des Spezifikationsdokuments
+-------------------------------------
+make pdf     ... erzeugt die PDF-Datei vip_lms.pdf .
+make ps      ... erzeugt die Postscript-Datei vip_lms.ps .
+make clean   ... löscht alle Dateien die während eines "make pdf" erzeugt
+                 wurden.
+
+Voraussetzungen/Abhängigkeiten
+------------------------------
+Damit das Dokument wie oben gezeigt erzeugt werden kann, werden unter anderem
+folgende Softwarepakete[2] benötigt:
+
+  make, texlive-latex-base, texlive-latex-extra, texlive-latex-recommended
+  plotutils, transfig, git, ghostscript
+
+
+FYI:
+
+pic2plot
+========
+Mit diesem Programm werden *.pic Dateien in unterschiedliche Grafikformate
+übersetzt. Um z.B. eine PIC-Datei nach PDF zu übersetzten:
+
+  export file=la_create_exercise_seq
+  pic2plot -Tps --page-size a4  --rotation 90 ${file}.pic > ${file}.ps
+  ps2pdf ${file}.ps ${file}.pdf
+
+Jetzt kann die Datei mit einem beliebigen PDF-Betrachter angeschaut werden:
+
+  mupdf la_create_exercise_seq.pdf
+
+http://www.umlgraph.org/doc/seq-intro.html ... Eine Einührung in PIC-Makros
+
+[1] http://FreeIT.de/pub/vip_lms.pdf
+[2] Softwarepakete bezogen auf Debian Wheezy
