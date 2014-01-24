@@ -9,7 +9,7 @@ Erstellen des Spezifikationsdokuments
 -------------------------------------
 make pdf     ... erzeugt die PDF-Datei vip_lms.pdf .
 make ps      ... erzeugt die Postscript-Datei vip_lms.ps .
-make clean   ... löscht alle Dateien die während eines "make pdf" erzeugt
+make clean   ... löscht alle Dateien die während eines "make ..." erzeugt
                  wurden.
 
 Voraussetzungen/Abhängigkeiten
@@ -17,8 +17,8 @@ Voraussetzungen/Abhängigkeiten
 Damit das Dokument wie oben gezeigt erzeugt werden kann, werden unter anderem
 folgende Softwarepakete[2] benötigt:
 
-  make, texlive-latex-base, texlive-latex-extra, texlive-latex-recommended
-  plotutils, transfig, git, ghostscript
+  apt-get install make texlive-latex-base texlive-latex-extra texlive-latex-recommended \
+  plotutils transfig git ghostscript
 
 
 FYI:
