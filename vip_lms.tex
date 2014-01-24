@@ -128,7 +128,7 @@ werden, welchen der registrierende Participant selbst auch angehört. Die
 \texttt{/sys/subparticipants} Ressource sieht folgendermaßen aus:
 \begin{verbatim}
 {
-  "mapping_id": "<id>",               #maybe a session id
+  "realm": "<any context>",           #maybe a session id
   "communities": ["<cid|name>", ...], #optional, default:"public"
   "community_selfrouting": <boolean>, #optional, default:false
   "events": <boolean>                 #optional, default:true
