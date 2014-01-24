@@ -62,12 +62,6 @@
   \item Das Applet wird aus einem Aufgabenpool von Ilias heraus gestartet,
     entweder zur Erstellung einer neuen oder zum Überarbeitung einer bereits
     bestehenden Aufgabe (exercise).
-  \item Die Aufgabe (exercise) wird als \textit{hidden field} im HTML
-    Dokument eingebettet, so da"s das Applet diese dort entnehmen kann.
-  \item Beim Starten des Applets werden folgende Parameter mitgegeben:\par
-      ECS-URL, EcsAuthId, Ilias mid, Computation-Backend mid,
-      Exercise-Ressourcen-Name exres, Solution-Ressourcen-Name solres,
-      Result-Ressourcen-Name resres, Exercise-ID exid 
   \item Der Dozent bearbeitet/erstellt seine Aufgabe mit dem Applet und kann
     diese auch jederzeit durch Angabe einer Lösung durch drücken von
     \button{berechnen}\footnote{Wird von Applet implementiert.} testweise
@@ -75,9 +69,7 @@
   \item Der Dozent kann seine Aufgabe jederzeit durch drücken von
     \button{speichern}\footnote{Wird von Ilias implementiert (ExSave:Button).}
     sichern, das Applet verlassen/beenden und zu einem späteren Zeitpunkt durch
-    erneute Auswahl der Aufgabe in Ilias wieder bearbeiten. Dabei wird die
-    neue/gänderte Aufgabe (exercise) ebenfalls über ein \textit{hidden field}
-    im HTML Dokument (ExSave:Button Kontext) ans Ilias zurückgegeben.
+    erneute Auswahl der Aufgabe in Ilias wieder bearbeiten.
 \end{itemize}
 Siehe Sequenzdiagramm auf Seite \pageref{seq:la_create_exercise}, Abbildung \ref{seq:la_create_exercise}.
 
@@ -86,22 +78,14 @@ Siehe Sequenzdiagramm auf Seite \pageref{seq:la_create_exercise}, Abbildung \ref
 \begin{itemize}
   \item Das Applet wird beim Bearbeiten einer VIP-Aufgabe innerhalb eines Ilias-Tests
     oder als alleinstehende Aufgabe gestartet.
-  \item Die Aufgabe (exercise) wird als \textit{hidden field} im HTML
-    Dokument eingebettet, so da"s das Applet diese dort entnehmen kann.
-  \item Beim Starten des Applets werden folgende Parameter mitgegeben:\par
-      ECS-URL, EcsAuthId, Ilias mid, Computation-Backend mid,
-      Exercise-Ressourcen-Name exres, Solution-Ressourcen-Name solres,
-      Result-Ressourcen-Name resres, Exercise-ID exid 
   \item Der Student kann jederzeit eine Berechnung seiner eingegebenen Lösung
     durch drücken von \button{berechnen}\footnote{Wird von Applet
     implementiert.} anfordern.
   \item Der Student gibt seine eingegebene Lösung durch drücken von
     \button{weiter}\footnote{Wird von Ilias implementiert
-    (SolutionSave:Button).} ab, wobei \textit{solutions} und \textit{results}
-    als \textit{hidden field} im HTML Dokument eingebettet werden
-    (SolutionSave:Button Kontext). Sollte bis dahin noch keine oder keine
-    aktuelle Berechnung der Aufgabe vorliegen, weist das Applet daraufhin, eine
-    solche durchzuführen.
+    (SolutionSave:Button).} ab. Sollte bis dahin noch keine oder keine aktuelle
+    Berechnung der Aufgabe vorliegen, weist das Applet daraufhin, eine solche
+    durchzuführen.
 \end{itemize}
 Siehe Sequenzdiagramm auf Seite \pageref{seq:sa_create_solution_seq}, Abbildung \ref{seq:sa_create_solution_seq}.
 
