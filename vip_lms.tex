@@ -36,7 +36,7 @@
 
 \begin{document}
 \title{VIP-LMS Anbindung}
-\author{Heiko Bernl"ohr, Per Pascal Grube, Thomas Richter, David Boehringer}
+\author{Heiko Bernl"ohr\\FreeIT.de \and Thomas Richter\\Uni Stgt. \and David Boehringer\\Uni Stgt. \and Per Pascal Grube\\Uni Stgt. \and Stephan Rudlof\\Uni Stgt. }
 \maketitle
 \begin{center}
 %  Version: 2.0
@@ -112,12 +112,20 @@ werden, welchen der registrierende Participant selbst auch angehört. Die
 \texttt{/sys/subparticipants} Ressource sieht folgendermaßen aus:
 \begin{verbatim}
 {
-  "realm": "<any context>",           #maybe a session id
+  "realm": "<any context>",           #optional, maybe a session id
   "communities": ["<cid|name>", ...], #optional, default:"public"
   "community_selfrouting": <boolean>, #optional, default:false
-  "events": <boolean>                 #optional, default:true
+  "events": <boolean>,                #optional, default:true
+  "cookie": <cookie>                  #wird von ECS erzeugt
 }
 \end{verbatim}
+
+\begin{description}
+  \item[GET] Liefert realm, communities, community\_selfrouting, events und cookie (Statuscode 200).
+  \item[POST] Erzeugt neuen Subparticipanten (Statuscode 201) und liefert im \textit{Location:} Header die neue Representations-URL des Subparticipanten. Mögliche Aufrufparameter: realm, communities, community\_selfrouting, events.
+  \item[DELETE] Löscht einen Subparticipanten (Statuscode 200). Mögliche Aufrufparameter: realm, communities, community\_selfrouting, events.
+  \item[PUT] Erlaubt das Ändern der Subparticipanten-Attribute: realm, communities, community\_selfrouting, events. Wie immer wird bei der PUT Operation die komplette Representation (alle Attribute) erneuert. Nicht angegebene Attribute erhalten also den Defaultwert. Liefert Statuscode 200.
+\end{description}
 
 \clearpage
 \begin{appendix}

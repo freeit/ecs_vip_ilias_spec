@@ -19,13 +19,13 @@ step();
 message(A,I,"create/edit exercise");
 active(I);
 
-message(I,E,"subpid,EcsAuthId:=POST:/sys/subparticipants")
+message(I,E,"subpid,cookie:=POST:/sys/subparticipants")
 active(E)
 message(I,E,"exid:=POST:/cc/vip_exercises");
 step();inactive(E);step()
 
 create_message(I,L,"Lecturer:Applet");
-oconstraint("params:ecsurl,EcsAuthId,iliasmid,compmid,exres,solres,resres,exid");
+oconstraint("params:ecsurl,cookie,iliasmid,compmid,exres,solres,resres,exid");
 
 create_message(I,B,"ExSave:Button");
 inactive(I);
