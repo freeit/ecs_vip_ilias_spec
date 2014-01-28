@@ -127,6 +127,19 @@ werden, welchen der registrierende Participant selbst auch angehört. Die
   \item[PUT] Erlaubt das Ändern der Subparticipanten-Attribute: realm, communities, community\_selfrouting, events. Wie immer wird bei der PUT Operation die komplette Representation (alle Attribute) erneuert. Nicht angegebene Attribute erhalten also den Defaultwert. Liefert Statuscode 200.
 \end{description}
 
+\section{Sicherheit}
+\subsection{Zertifikate}
+Ein Subparticipant wird entgegen normaler Participanten nicht mit einem
+Clientzertifikat ausgestattet und kann somit auch keiner Peer-Authentifikation
+unterzogen werden, wird aber stattdessen vom generierenden Participanten mit
+einem individuellen Cookie versorgt, so daß es genügt, den Subparticipanten mit
+dem entsprechenden CA-Root-Zertifikat auszustatten. Dieses CA-Root-Zertifikat
+ist öffentlicher Natur und kann bedenkenlos ins Applet integriert oder auch
+dynamisch\footnote{CA-Root-Cert von FreeIT:
+\url{http://FreeIT.de/pub/freeit-root-certificate.crt.pem}} geladen werden.
+
+
+
 \clearpage
 \begin{appendix}
 \section{Browser $\rightarrow$ Applet Kommunikation}\label{btoacom}
