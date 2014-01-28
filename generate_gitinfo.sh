@@ -22,5 +22,15 @@ for pref in $prefixes
 		commidate={%ai},
 		commudate={%at},
 		refnames={%d}
-	]{gitsetinfo}" HEAD > $pref/gitHeadInfo.gin
+	]{gitsetinfo}" HEAD > $pref/.gitHeadInfo.gin
 	done
+if [ ! -f gitHeadInfo.gin ]; then
+  mv .gitHeadInfo.gin gitHeadInfo.gin
+else
+  diff -q .gitHeadInfo.gin gitHeadInfo.gin
+  if [ $? = 1 ]; then
+    mv .gitHeadInfo.gin gitHeadInfo.gin
+  else
+    rm .gitHeadInfo.gin
+  fi
+fi
