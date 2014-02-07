@@ -56,11 +56,9 @@ message(I,I,"storing exercise into pool");
 
 message(I,E,"DELETE:sys/subparticipants/<subpid>");
 active(E)
-message(I,E,"DELETE:vip/exercises/<exid>");
 step();inactive(E);
 
 # Complete the lifelines
-step();
 complete(I);
 complete(E);
 complete(A);
