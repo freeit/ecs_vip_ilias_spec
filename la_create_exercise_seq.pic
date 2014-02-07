@@ -27,7 +27,7 @@ step();inactive(E);step()
 create_message(I,L,"Lecturer:Applet");
 oconstraint("params:ecsurl,cookie,iliasmid,compmid,exres,solres,resres,exid");
 
-create_message(I,B,"ExSave:Button");
+create_message(I,B,"Save:Button");
 inactive(I);
 message(L,E,"exercise:=GET:vip/exercises/<exid>");
 active(L); active(E);
@@ -40,7 +40,7 @@ active(L);step();inactive(L);
 message(A,B,"save exercise");
 active(B);
 step();
-message(B,L,"applet#saveExercise()");
+message(B,L,"viplab.getLoadedExercise()");
 active(L);
 rmessage(L,B,"exercise");
 inactive(L); delete(L);
