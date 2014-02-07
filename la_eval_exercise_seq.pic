@@ -51,13 +51,14 @@ active(L);
 message(L,L,"call %ptstarget script to store evaluations");
 step();
 inactive(L);step();
-inactive(L);delete(L);
+inactive(L);
 
 message(A,B,"save evaluations");
 active(B);
 rmessage(B,I,"evaluations");
 comment(B,,up .4 left .5, wid 1.5 ht .7 "evaluations placed" "into page form" "from %ptstarget script");
 inactive(B); delete(B);
+delete(L);
 
 active(I);
 step();
