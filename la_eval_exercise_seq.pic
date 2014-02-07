@@ -1,0 +1,74 @@
+.PS
+copy "sequence.pic";
+
+movewid = 1;
+maxpsht = 15;
+maxpswid = 15;
+spacing = 0.2;
+
+# Define objects
+placeholder_object(L);
+object(E,":ECS");
+placeholder_object(B);
+object(I,"Ilias:LMS");
+actor(A,"");
+step();
+
+# Message sequences
+
+message(A,I,"eval exercise");
+active(I);
+
+message(I,E,"subpid,cookie:=POST>Applet:sys/subparticipants")
+active(E)
+message(I,E,"POST>Applet:vip/exercises");
+message(I,E,"POST>Applet:vip/solutions");
+message(I,E,"POST>Applet:vip/results");
+message(I,E,"POST>Applet:vip/evaluations");
+step();inactive(E);step()
+
+create_message(I,L,"Lecturer:Applet");
+oconstraint("params:ecsurl,cookie,iliasmid,compmid,exres,solres,resres,exid");
+
+create_message(I,B,"Save:Button");
+inactive(I);
+message(L,E,"event:=*POST:sys/events/fifo");
+active(L); active(E);
+step();
+inactive(L); inactive(E);
+message(L,E,"ex:=DELETE:vip/exercises/<id>");
+active(L); active(E);
+message(L,E,"sol:=DELETE:vip/solutions/<id>");
+message(L,E,"res:=DELETE:vip/results/<id>");
+message(L,E,"ev:=DELETE:vip/evaluations/<id>");
+step();
+inactive(L); inactive(E);
+step();
+message(A,L,"evaluate exercise");
+active(L);step();inactive(L);
+
+message(A,B,"save evaluations");
+active(B);
+step();
+message(B,L,"viplab.getEvaluationCode()");
+active(L);
+rmessage(L,B,"evaluations");
+inactive(L); delete(L);
+rmessage(B,I,"evaluations");
+comment(B,,down .4 right, wid 1.5 ht .5 "evaluations embedded" "into hidden field");
+inactive(B); delete(B);
+
+active(I);
+step();
+message(I,I,"storing evaluations data");
+
+message(I,E,"DELETE:sys/subparticipants/<subpid>");
+active(E)
+step();inactive(E);
+
+# Complete the lifelines
+complete(I);
+complete(E);
+complete(A);
+.PE
+
