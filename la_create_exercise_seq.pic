@@ -22,6 +22,7 @@ active(I);
 message(I,E,"subpid,cookie:=POST>Applet:sys/subparticipants")
 active(E)
 message(I,E,"POST>Applet:vip/exercises");
+message(I,E,"POST>Applet:vip/evaluations");
 step();inactive(E);step()
 
 create_message(I,L,"Lecturer:Applet");
@@ -35,6 +36,7 @@ step();
 inactive(L); inactive(E);
 message(L,E,"ex:=DELETE:vip/exercises/<id>");
 active(L); active(E);
+message(L,E,"ev:=DELETE:vip/evaluations/<id>");
 step();
 inactive(L); inactive(E);
 message(A,L,"composing and testing exercise");
@@ -45,17 +47,20 @@ active(B);
 step();
 message(B,L,"viplab.getLoadedExercise()");
 active(L);
-rmessage(L,B,"exercise");
+message(B,L,"viplab.getEvaluationCode()");
+step();
 inactive(L); delete(L);
-rmessage(B,I,"exercise");
-comment(B,,down .4 right, wid 1.5 ht .5 "exercise embedded" "into hidden field");
+rmessage(B,I,"exercise, evaluationscode");
+comment(B,,down .4 right 0.3, wid 1.8 ht .5 "exercise,evaluationcode" "embedded into" "hidden field");
 inactive(B); delete(B);
 
 active(I);
 step();
 message(I,I,"storing additional metadata into exercise");
 step();
-message(I,I,"storing exercise into pool");
+message(I,I,"storing evaluations code");
+step();
+message(I,I,"storing exercise");
 
 message(I,E,"DELETE:sys/subparticipants/<subpid>");
 active(E)
