@@ -30,7 +30,7 @@ step();inactive(E);step()
 create_message(I,L,"Lecturer:Applet");
 oconstraint("params:ecsurl,cookie,iliasmid,compmid,exres,solres,resres");
 
-create_message(I,B,"Save:Button");
+create_message(I,B,"Save:Form");
 inactive(I);
 message(L,E,"event:=*POST:sys/events/fifo");
 active(L); active(E);
@@ -44,23 +44,24 @@ message(L,E,"ev:=DELETE:vip/evaluations/<id>");
 step();
 inactive(L); inactive(E);
 step();
-message(A,L,"evaluate exercise");
-active(L);step();inactive(L);
+
+message(A,L,"*evaluate exercise");
+active(L); step();
+active(L);
+message(L,L,"call %ptstarget script to store evaluations");
+step();
+inactive(L);step();
+inactive(L);delete(L);
 
 message(A,B,"save evaluations");
 active(B);
-step();
-message(B,L,"viplab.getEvaluationCode()");
-active(L);
-rmessage(L,B,"evaluations");
-inactive(L); delete(L);
 rmessage(B,I,"evaluations");
-comment(B,,down .4 right, wid 1.5 ht .5 "evaluations embedded" "into hidden field");
+comment(B,,up .4 left .5, wid 1.5 ht .7 "evaluations placed" "into page form" "from %ptstarget script");
 inactive(B); delete(B);
 
 active(I);
 step();
-message(I,I,"storing evaluations data");
+message(I,I,"store evaluations");
 
 message(I,E,"DELETE:sys/subparticipants/<subpid>");
 active(E)
