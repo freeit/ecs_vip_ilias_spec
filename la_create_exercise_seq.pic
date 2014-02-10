@@ -21,8 +21,8 @@ active(I);
 
 message(I,E,"subpid,cookie:=POST>Applet:sys/subparticipants")
 active(E)
-message(I,E,"POST>Applet:vip/exercises");
-message(I,E,"POST>Applet:vip/evaluations");
+message(I,E,"POST>Applet:%exercise");
+message(I,E,"POST>Applet:%evaluation");
 step();inactive(E);step()
 
 create_message(I,L,"Lecturer:Applet");
@@ -34,9 +34,9 @@ message(L,E,"event:=*POST:sys/events/fifo");
 active(L); active(E);
 step();
 inactive(L); inactive(E);
-message(L,E,"ex:=DELETE:vip/exercises/<id>");
+message(L,E,"ex:=DELETE:%exercise/<id>");
 active(L); active(E);
-message(L,E,"ev:=DELETE:vip/evaluations/<id>");
+message(L,E,"ev:=DELETE:%evaluation/<id>");
 step();
 inactive(L); inactive(E);
 message(A,L,"composing and testing exercise");
