@@ -19,35 +19,39 @@ step();
 message(A,I,"solve exercise");
 active(I);
 
-message(I,E,"subpid,cookie:=POST:/sys/subparticipants")
+message(I,E,"subpid,cookie:=POST:sys/subparticipants")
 active(E)
-message(I,E,"exid:=POST:/cc/vip_exercises");
+message(I,E,"POST>Applet:%exercise");
 step();inactive(E);step()
 
 create_message(I,S,"Student:Applet");
 oconstraint("params:ecsurl,cookie,iliasmid,compmid,exres,solres,resres,exid");
 
-create_message(I,B,"SolutionSave:Button");
+create_message(I,B,"Save:Form");
 inactive(I);
-message(S,E,"exercise:=GET:/cc/vip_exercises/<exid>");
+message(S,E,"event:=*POST:sys/events/fifo");
 active(S); active(E);
 step();
 inactive(S); inactive(E);
+message(S,E,"ex:=DELETE:%exercise/<id>");
+active(S); active(E);
 step();
-message(A,S,"find/compute solution");
-active(S); step(); inactive(S);
+inactive(S); inactive(E);
+message(A,S,"*find/compute solution");
+active(S);step();inactive(S);
 
 message(A,B,"save solution");
 active(B);
 step();
-message(B,S,"applet#saveSolution()");
+message(B,S,"viplab.getSolution()");
 active(S);
-rmessage(S,B,"solution+result");
-inactive(S); delete(S);
-rmessage(B,I,"solution+result");
-comment(B,,down .4 right .1, wid 1.8 ht .5 "solution+result embedded" "into hidden field");
+message(B,S,"viplab.getResult()");
+step();
+inactive(S);
+rmessage(B,I,"solution, result");
+comment(B,,down .4 right 0.3, wid 1.3 ht .5 "solution, result" "embedded into" "hidden field");
 inactive(B); delete(B);
-step()
+delete(S);
 
 active(I);
 step();
@@ -55,11 +59,9 @@ message(I,I,"storing solution+result");
 
 message(I,E,"DELETE:/sys/subparticipants/<subpid>");
 active(E)
-message(I,E,"DELETE:/cc/vip_exercises/<exid>");
 step();inactive(E);
 
 # Complete the lifelines
-step();
 complete(I);
 complete(E);
 complete(A);
