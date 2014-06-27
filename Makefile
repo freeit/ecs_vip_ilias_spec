@@ -40,6 +40,9 @@ vpdf:$(PDF_FILES)
 
 ftp:$(PDF_FILES)
 	ncftpput -f ~/.ncftp/prosite.dat -S .tmp -R  /htdocs/pub vip_lms.pdf
+	cp vip_lms.pdf vip_lms`cat gitHeadInfo.gin | sed -n -e '/refname/s/.* \([0-9]*\)\.\([0-9]*\).*/\1\2/p'`.pdf
+	ncftpput -f ~/.ncftp/prosite.dat -S .tmp -R  /htdocs/pub vip_lms`cat gitHeadInfo.gin | sed -n -e '/refname/s/.* \([0-9]*\)\.\([0-9]*\).*/\1\2/p'`.pdf
+	rm -f vip_lms`cat gitHeadInfo.gin | sed -n -e '/refname/s/.* \([0-9]*\)\.\([0-9]*\).*/\1\2/p'`.pdf
 
 $(addsuffix .eps, $(basename $(PIC_FILES))):%.eps:%.pic
 	pic2plot -Tps --page-size a4  --rotation 90 $< > $(addsuffix .ps, $(basename $@))
