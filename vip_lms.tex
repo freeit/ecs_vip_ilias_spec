@@ -9,17 +9,17 @@
 \usepackage{ifthen}
 \usepackage{gitinfo}
 %\enabledraftstandard
-\usepackage[firstpage]{draftwatermark}
+%\usepackage[firstpage]{draftwatermark}
 \usepackage[hidelinks]{hyperref}
 \usepackage{url}
 \usepackage{xcolor,soul,lipsum}
 
 \newcommand{\myul}[1]{\ul{#1}}
 
-\SetWatermarkText{ENTWURF}
-\SetWatermarkScale{4}
-\SetWatermarkAngle{50}
-\SetWatermarkLightness{0.90}
+%\SetWatermarkText{ENTWURF}
+%\SetWatermarkScale{4}
+%\SetWatermarkAngle{50}
+%\SetWatermarkLightness{0.90}
 
 \sloppy
 %\hoffset-3mm
@@ -116,23 +116,112 @@ dynamisch, über die \texttt{/sys/subparticipants} Ressource,
 angemeldet/registriert wird. Im Unterschied zu einem klassischen anonymen
 Participanten darf er nicht nur der \textit{public} community angehören,
 sondern kann durch den registrierenden Participanten jeder Community zugeteilt
-werden, welchen der registrierende Participant selbst auch angehört. Die
-\texttt{/sys/subparticipants} Ressource sieht folgendermaßen aus:
+werden, welchen der registrierende Participant selbst auch angehört. Beim
+erzeugen eines Subparticipanten kann dem POST folgendes JSON
+Initialisierungs-Objekt übergeben werden: 
 \begin{verbatim}
 {
   "realm": "<any context>",           #optional, maybe a session id
-  "communities": ["<cid|name>", ...], #optional, default:"public"
+  "communities": ["<cid|name>", ...], #optional, default:[]
   "community_selfrouting": <boolean>, #optional, default:false
-  "events": <boolean>,                #optional, default:true
-  "cookie": <cookie>                  #wird von ECS erzeugt
+  "events": <boolean>                 #optional, default:true
 }
 \end{verbatim}
+Also z.B.
+\begin{verbatim}
+curl ... -H 'Content-Type: application/json' -X POST \
+         -d '{"realm":"ViP", "communities":["public"]}' \
+         https://vipecs.de/sys/subparticipants
+\end{verbatim}
+Eine Antwort könnte folgendermaßen aussehen:
+\begin{verbatim}
+HTTP/1.1 200 OK
+Date: Thu, 26 Jun 2014 23:47:23 GMT
+Status: 200 OK
+Connection: close
+Location: https://vipecs.de/sys/subparticipants/52
+ETag: "0dbc2769cf17bdeb71352f119586fc80"
+X-Runtime: 230
+Content-Length: 407
+Content-Type: application/json; charset=utf-8
+Cache-Control: private, max-age=0, must-revalidate
 
+{
+  "realm": "ViP",
+  "description": "Created from \"Teacher client\" (pid:3)",
+  "communities": [
+    "public"
+  ],
+  "dns": "N/A",
+  "auth_ids": [
+    {
+      "desc": "Randomized authid",
+      "auth_id": "8a43d5d3029d17335f5adb56f1a13077"
+    }
+  ],
+  "community_selfrouting": false,
+  "name": "Subparticipant (id:52)",
+  "events": true,
+  "email": "xaver@ilias.lms.de"
+}
+\end{verbatim}
+Hier ist noch besonders das erste Element von \texttt{auth\_ids} zu erwähnen.
+Dort stellt der Wert von \texttt{auth\_id} auch gleichzeitig das Cookie für den
+Subparticipanten dar, welches dieser bei Anfragen an den ECS zur
+Authentisierung stets im HTTP-Header folgendermaßen mitführen muß:
+\begin{verbatim}
+curl ... -H "Cookie: ecs_subparticipant=8a43d5d3029d17335f5adb56f1a13077" \
+         -X GET https://vipecs.de/sys/memberships
+\end{verbatim}
+Diesen Wert muß also das LMS beim erzeugen des Studenten-/Dozentenapplets als
+Cookie-Parameter übergeben (siehe Abbildungen \ref{seq:la_create_exercise},
+\ref{seq:la_eval_exercise} und \ref{seq:sa_create_solution_seq}).
 \begin{description}
   \item[GET] Liefert realm, communities, community\_selfrouting, events und cookie (Statuscode 200).
   \item[POST] Erzeugt neuen Subparticipanten (Statuscode 201) und liefert im \textit{Location:} Header die neue Representations-URL des Subparticipanten. Mögliche Aufrufparameter: realm, communities, community\_selfrouting, events.
-  \item[DELETE] Löscht einen Subparticipanten (Statuscode 200). Mögliche Aufrufparameter: realm, communities, community\_selfrouting, events.
-  \item[PUT] Erlaubt das Ändern der Subparticipanten-Attribute: realm, communities, community\_selfrouting, events. Wie immer wird bei der PUT Operation die komplette Representation (alle Attribute) erneuert. Nicht angegebene Attribute erhalten also den Defaultwert. Liefert Statuscode 200.
+  \item[DELETE] Löscht einen Subparticipanten (Statuscode 200).
+  \item[PUT] Erlaubt das Ändern der Subparticipanten-Attribute: realm, communities, community\_selfrouting, events. Wie immer wird bei der PUT Operation die komplette Representation (alle Attribute) erneuert. Nicht angegebene Attribute erhalten also den Defaultwert (siehe oben). Liefert Statuscode 200.
+\end{description}
+
+\subsection{/sys/configs}
+Dient zur Statusabfrage eines Sub-/Participanten:
+\begin{verbatim}
+curl ... -X GET https://vipecs.de/sys/configs
+\end{verbatim}
+Eine Antwort (ohne HTTP Header) könnte folgendermaßen aussehen:
+\begin{verbatim}
+{
+  "resource_events": {
+    "/numlab/exercises": true,
+    "/numlab/cpp_results": true,
+    "/numlab/dumux_exercises": true,
+    "/numlab/cpp_exercises": true,
+    "/sys/auths": false,
+    "/numlab/dumux_solutions": true,
+    "/campusconnect/cms_keynames": true,
+    "/numlab/results": true,
+    "/numlab/solutions": true,
+    "/numlab/cpp_solutions": true,
+    "/numlab/dumux_results": true
+  },
+  "selfrouting": false,
+  "participant_events": false
+}
+\end{verbatim}
+Das Attribut \texttt{resource\_events} zeigt an, für welche Ressourcen der ECS
+bei aktivierten Participanten Events (\verb#{"participant_events": true}#)
+der Sub-/Participant Events vom ECS bekommt.
+\begin{description}
+  \item[GET] Liest die Ressource.
+  \item[POST] Erlaubt es dem aufrufenden Sub-/Participanten  ein selektives
+  verändern von \texttt{selfrouting} und/oder \texttt{participant\_events}.
+  Z.B. kann ein Sub-/Participant durch folgenden Aufruf für sich Eventerzeugung
+  beim ECS einschalten:
+  \begin{verbatim}
+  curl ... -H 'Content-Type: application/json' -X POST \
+           -d '{"participant_events":true"}' \
+           https://vipecs.de/sys/configs
+  \end{verbatim}
 \end{description}
 
 \section{Sicherheit}
