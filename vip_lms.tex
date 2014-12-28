@@ -150,9 +150,29 @@ Cache-Control: private, max-age=0, must-revalidate
 {
   "realm": "ViP",
   "description": "Created from \"Teacher client\" (pid:3)",
-  "communities": [
-    "public"
-  ],
+  "memberships": [                                                                                                                                                                         
+    {                                                                                                                                                                                      
+      "participants": [                                                                                                                                                                    
+        {                                                                                                                                                                                  
+          "email": "xaver@FreeIT.de",                                                                                                                                                      
+          "org": {                                                                                                                                                                         
+            "abbr": "S",                                                                                                                                                                   
+            "name": "Development FreeIT Stuttgart"                                                                                                                                         
+          },                                                                                                                                                                               
+          "name": "Subparticipant (id:67)",                                                                                                                                                
+          "mid": 190101,                                                                                                                                                                   
+          "dns": "N/A",                                                                                                                                                                    
+          "description": "Created from \"Teacher client\" (pid:3)",                                                                                                                        
+          "pid": 190376,                                                                                                                                                                   
+          "itsyou": true                                                                                                                                                                   
+        }                                                                                                                                                                                  
+      ],                                                                                                                                                                                   
+      "community": {                                                                                                                                                                       
+        "cid": 1,                                                                                                                                                                          
+        "name": "public",                                                                                                                                                                  
+        "description": "For anonymous participants."                                                                                                                                       
+      }                                                                                                                                                                                    
+    } 
   "dns": "N/A",
   "auth_ids": [
     {
@@ -176,7 +196,13 @@ curl ... -H "Cookie: ecs_subparticipant=8a43d5d3029d17335f5adb56f1a13077" \
 \end{verbatim}
 Diesen Wert muß also das LMS beim erzeugen des Studenten-/Dozentenapplets als
 Cookie-Parameter übergeben (siehe Abbildungen \ref{seq:la_create_exercise},
-\ref{seq:la_eval_exercise} und \ref{seq:sa_create_solution_seq}).
+\ref{seq:la_eval_exercise} und \ref{seq:sa_create_solution_seq}).\medskip
+
+Das \texttt{memberships} Element stellt entgegen der \texttt{sys/memberships}
+Ressource lediglich die eigenen Mitgliedschaften des Subparticipanten dar und
+dient somit dem erzeugenden Participanten zur anschließenden bequemen
+Kommunikation mit seinem Subparticipanten.
+
 \begin{description}
   \item[GET] Liefert realm, communities, community\_selfrouting, events und cookie (Statuscode 200).
   \item[POST] Erzeugt neuen Subparticipanten (Statuscode 201) und liefert im \textit{Location:} Header die neue Representations-URL des Subparticipanten. Mögliche Aufrufparameter: realm, communities, community\_selfrouting, events.
